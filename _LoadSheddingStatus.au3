@@ -26,9 +26,9 @@
 ;~ $eskomstatus = LSS_Eskom("http://loadshedding.eskom.co.za/LoadShedding/GetStatus")
 ;~ ConsoleWrite("Eskom Status = " & $eskomstatus & @CRLF)
 
-;~ ConsoleWrite("Checking Joburg" & @CRLF)
-;~ $joburgstatus = LSS_Joburg("https://www.citypower.co.za/customers/pages/Load_Shedding.aspx")
-;~ ConsoleWrite("Joburg Status = " & $joburgstatus & @CRLF)
+ConsoleWrite("Checking Joburg" & @CRLF)
+$joburgstatus = LSS_Joburg("https://www.citypower.co.za/customers/pages/Load_Shedding.aspx")
+ConsoleWrite("Joburg Status = " & $joburgstatus & @CRLF)
 
 Func LSS_Durban($durbanls_URL) ; Check loadshedding status according to Durban
 
@@ -58,7 +58,7 @@ Func LSS_Durban($durbanls_URL) ; Check loadshedding status according to Durban
 EndFunc   ;==>LSStatus_Durban
 
 Func LSS_CT($ewnls_URL, $coctls_URL) ; Check loadshedding status according to ewn + coct
-
+  
 ;~ 	ClearIECache()
 	;needs to consider other sources of data still
 	Local $output
@@ -82,7 +82,6 @@ Func LSS_CT($ewnls_URL, $coctls_URL) ; Check loadshedding status according to ew
 			$output = -1
 			Local $_htmlCoCT1 = StringRegExpReplace(BinaryToString(InetRead($coctls_URL), 19), '<[^>]*>', "")
 			If $_htmlCoCT1 = "" Then Return $output
-;~ 	$_htmlDurban1a = StringRegExpReplace($_htmlDurban1, '�', "")
 			Local $_htmlCoCT2 = StringInStr($_htmlCoCT1, "CAPE TOWN IS CURRENTLY EXPERIENCING LOADSHEDDING")
 			If $_htmlCoCT2 = 0 Then Local $_htmlCoCT2a = StringInStr($_htmlCoCT1, "LOAD SHEDDING HAS BEEN SUSPENDED UNTIL FURTHER NOTICE")
 			Select
@@ -132,17 +131,23 @@ Func LSS_Joburg($joburgls_URL) ; Check loadshedding status according to Durban
 
 	Local $_htmlJoburg1 = StringRegExpReplace(BinaryToString(InetRead($joburgls_URL), 19), '<[^>]*>', "")
   	If $_htmlJoburg1 = "" Then Return -1
-	Local $_htmlJoburg1a = StringRegExpReplace($_htmlJoburg1, '​|\&#.*?\;', "")
+	Local $_htmlJoburg1a = StringRegExpReplace($_htmlJoburg1, '​|\&#.*?\;', " ")
+;~   ConsoleWrite($_htmlJoburg1a & @CRLF)
 ;~   If StringInStr(StringStripWS(StringMid($_htmlJoburg1a,StringInStr($_htmlJoburg1a, "STATUS") + 7, 10), 8),"INACTIVE") > 1 Then Return 0
   Local $_htmlJoburg2 = StringInStr($_htmlJoburg1a, "We are currently")
   Local $JoburgBlock = StringInStr($_htmlJoburg1a, "Block")
-  If $_htmlJoburg2 = 0 Then $_htmlJoburg2 = 11837
+  If $_htmlJoburg2 = 0 Then $_htmlJoburg2 = 11830
   If $JoburgBlock = 0 Or $JoburgBlock - $_htmlJoburg2 > 65 Then
       Local $StringLength = 60
   Else
       Local $StringLength = $JoburgBlock - $_htmlJoburg2 - 16
   EndIf
 	Local $_htmlJoburg3 = StringStripWS(StringMid($_htmlJoburg1a, $_htmlJoburg2 + 16, $StringLength), 8)
+  
+;~   ConsoleWrite("JoburgStringPos0 = " & $_htmlJoburg2 & @CRLF)
+;~   ConsoleWrite("JoburgStringLen = " & $StringLength & @CRLF)
+;~   ConsoleWrite("JoburgString = " & $_htmlJoburg3 & @CRLF)
+  
 	Select
 		Case StringInStr($_htmlJoburg3, "Not") > 0
 			$output = 0

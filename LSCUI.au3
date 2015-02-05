@@ -26,6 +26,7 @@ Local $eskomls_URL = "http://loadshedding.eskom.co.za/LoadShedding/GetStatus"
 Local $durbanls_URL = "http://www.durban.gov.za/City_Services/electricity/Load_Shedding/Pages/default.aspx"
 Local $coctls_URL = "http://www.capetown.gov.za/en/electricity/Pages/LoadShedding.aspx"
 Local $joburgls_URL = "https://www.citypower.co.za/customers/pages/Load_Shedding.aspx"
+Local $emd_URL = "https://twitter.com/Eskom_MediaDesk/"
 Local $Source = 1 ; default = 1 CoCT
 Local $ForceSource = 0
 Local $noSplit = 0
