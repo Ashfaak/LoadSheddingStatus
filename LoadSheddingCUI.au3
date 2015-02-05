@@ -33,7 +33,7 @@ Local $help = 0
 Local $aSourceChange[2]
 Local $allsources = 0
 Local $aCMD[6] ;Number of command line input variables, see cmdlineParse()
-Global $Verbose = 1
+Global $Verbose = 0
 
 Local $scmdline = _ArrayToString($CmdLine, " ", 1)
 If StringLen($scmdline) > 0 Then ; Handling commandline inputs
@@ -113,7 +113,7 @@ Func cmdlineParse($acmdline) ; Parses commandline inputs
 	Local $Source = 1
 	Local $noSplit = 0
 	Local $help = 0
-  Local $allsources = 0
+	Local $allsources = 0
 	Local $aOutput[6]
 
 	If StringInStr($acmdline, "verbose") Then $Verbose = 1 ; [0]
