@@ -13,15 +13,19 @@
 ;~ $Verbose = 1
 
 ;~ Example of usage
+
 ;~ ConsoleWrite("Checking CoCT" & @CRLF)
 ;~ $coctstatus = LSS_CT("http://ewn.co.za/assets/loadshedding/assets/loadshedding/api/status", "http://www.capetown.gov.za/en/electricity/Pages/LoadShedding.aspx")
 ;~ ConsoleWrite("CoCT Status = " & $coctstatus & @CRLF)
+
 ;~ ConsoleWrite("Checking Durban" & @CRLF)
 ;~ $durbanstatus = LSS_Durban("http://www.durban.gov.za/City_Services/electricity/Load_Shedding/Pages/default.aspx")
 ;~ ConsoleWrite("Durban Status = " & $durbanstatus & @CRLF)
+
 ;~ ConsoleWrite("Checking Eskom" & @CRLF)
 ;~ $eskomstatus = LSS_Eskom("http://loadshedding.eskom.co.za/LoadShedding/GetStatus")
 ;~ ConsoleWrite("Eskom Status = " & $eskomstatus & @CRLF)
+
 ;~ ConsoleWrite("Checking Joburg" & @CRLF)
 ;~ $joburgstatus = LSS_Joburg("https://www.citypower.co.za/customers/pages/Load_Shedding.aspx")
 ;~ ConsoleWrite("Joburg Status = " & $joburgstatus & @CRLF)
@@ -132,6 +136,7 @@ Func LSS_Joburg($joburgls_URL) ; Check loadshedding status according to Durban
 ;~   If StringInStr(StringStripWS(StringMid($_htmlJoburg1a,StringInStr($_htmlJoburg1a, "STATUS") + 7, 10), 8),"INACTIVE") > 1 Then Return 0
   Local $_htmlJoburg2 = StringInStr($_htmlJoburg1a, "We are currently")
   Local $JoburgBlock = StringInStr($_htmlJoburg1a, "Block")
+  If $_htmlJoburg2 = 0 Then $_htmlJoburg2 = 11837
   If $JoburgBlock = 0 Or $JoburgBlock - $_htmlJoburg2 > 65 Then
       Local $StringLength = 60
   Else
