@@ -2,7 +2,7 @@
 #AutoIt3Wrapper_Change2CUI=y
 #AutoIt3Wrapper_Res_Comment=Load Shedding CUI
 #AutoIt3Wrapper_Res_Description=Checks the current load shedding status
-#AutoIt3Wrapper_Res_Fileversion=1.0.0.5
+#AutoIt3Wrapper_Res_Fileversion=1.0.0.4
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=p
 #AutoIt3Wrapper_Res_LegalCopyright=2015 Ashfaak
 #AutoIt3Wrapper_Run_Tidy=y
@@ -182,6 +182,7 @@ Func Help()
 	ConsoleWrite("-joburg		Forces it to use Joburg as a source, will fallback to default if broken" & @CRLF)
 	ConsoleWrite("-verbose	Verbose output" & @CRLF)
 	ConsoleWrite("-nosplit	Outputs 3 instead of 3A or 3B" & @CRLF & @CRLF)
+  ConsoleWrite("-all  	Reports status from all sources" & @CRLF & @CRLF)
 	ConsoleWrite("Outputs:" & @CRLF)
 	ConsoleWrite("-1		Error or no internet" & @CRLF)
 	ConsoleWrite("0,1,2,3,3A,3B	The current load shedding status based on your settings above" & @CRLF)
