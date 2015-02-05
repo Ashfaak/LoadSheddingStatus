@@ -26,9 +26,9 @@
 ;~ $eskomstatus = LSS_Eskom("http://loadshedding.eskom.co.za/LoadShedding/GetStatus")
 ;~ ConsoleWrite("Eskom Status = " & $eskomstatus & @CRLF)
 
-ConsoleWrite("Checking Joburg" & @CRLF)
-$joburgstatus = LSS_Joburg("https://www.citypower.co.za/customers/pages/Load_Shedding.aspx")
-ConsoleWrite("Joburg Status = " & $joburgstatus & @CRLF)
+;~ ConsoleWrite("Checking Joburg" & @CRLF)
+;~ $joburgstatus = LSS_Joburg("https://www.citypower.co.za/customers/pages/Load_Shedding.aspx")
+;~ ConsoleWrite("Joburg Status = " & $joburgstatus & @CRLF)
 
 Func LSS_Durban($durbanls_URL) ; Check loadshedding status according to Durban
 
