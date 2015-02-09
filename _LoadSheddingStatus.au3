@@ -159,7 +159,7 @@ Func LSS_N24($news24ls_URL, $Verbose = 0) ; Check loadshedding status according 
 
 	Local $output
 
-	Local $_htmlN24 = BinaryToString(InetRead($news24ls_URL), 19) ;Get data from Eskom's LoadShedding page
+	Local $_htmlN24 = BinaryToString(InetRead($news24ls_URL), 19) ;Get data from News24's LoadShedding page
   
   If $Verbose Then ConsoleWrite("News24 Raw = " & $_htmlN24 & @CRLF)
 

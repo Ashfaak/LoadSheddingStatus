@@ -32,9 +32,9 @@ Local $ForceSource = 0
 Local $noSplit = 0
 Local $help = 0
 Local $aSourceChange[2]
-Local $allsources = 1
+Local $allsources = 0
 Local $aCMD[6] ;Number of command line input variables, see cmdlineParse()
-Global $Verbose = 1
+Global $Verbose = 0
 
 Local $scmdline = _ArrayToString($CmdLine, " ", 1)
 
