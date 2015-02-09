@@ -21,6 +21,7 @@
 ;~ #include <GetOpt.au3>
 
 Local $ewnls_URL = "http://ewn.co.za/assets/loadshedding/assets/loadshedding/api/status"
+Local $news24ls_URL = "http://loadshedding.news24.com/api/stage"
 Local $eskomls_URL = "http://loadshedding.eskom.co.za/LoadShedding/GetStatus"
 Local $durbanls_URL = "http://www.durban.gov.za/City_Services/electricity/Load_Shedding/Pages/default.aspx"
 Local $coctls_URL = "http://www.capetown.gov.za/en/electricity/Pages/LoadShedding.aspx"
@@ -31,9 +32,9 @@ Local $ForceSource = 0
 Local $noSplit = 0
 Local $help = 0
 Local $aSourceChange[2]
-Local $allsources = 0
+Local $allsources = 1
 Local $aCMD[6] ;Number of command line input variables, see cmdlineParse()
-Global $Verbose = 0
+Global $Verbose = 1
 
 Local $scmdline = _ArrayToString($CmdLine, " ", 1)
 
@@ -69,20 +70,24 @@ EndIf
 
 If $allsources = 1 Then ; When 'all' is input
 
-	ConsoleWrite("Eskom = ")
-	Local $EskomStatus = LSS_Eskom($eskomls_URL)
-	ConsoleWrite($EskomStatus & @CRLF)
-
+	Local $CTStatus = LSS_CT($ewnls_URL, $coctls_URL, $Verbose)
 	ConsoleWrite("Cape Town = ")
-	Local $CTStatus = LSS_CT($ewnls_URL, $coctls_URL)
 	ConsoleWrite($CTStatus & @CRLF)
 
+	Local $EskomStatus = LSS_Eskom($eskomls_URL, $Verbose)
+	ConsoleWrite("Eskom = ")
+	ConsoleWrite($EskomStatus & @CRLF)
+
+	Local $DurbanStatus = LSS_Durban($durbanls_URL, $Verbose)
 	ConsoleWrite("Durban = ")
-	Local $DurbanStatus = LSS_Durban($durbanls_URL)
 	ConsoleWrite($DurbanStatus & @CRLF)
 
+	Local $news24status = LSS_N24($news24ls_URL, $Verbose)
+	ConsoleWrite("News24 = ")
+	ConsoleWrite($news24status & @CRLF)
+
+	Local $JoburgStatus = LSS_Joburg($joburgls_URL, $Verbose)
 	ConsoleWrite("Joburg = ")
-	Local $JoburgStatus = LSS_Joburg($joburgls_URL)
 	ConsoleWrite($JoburgStatus & @CRLF)
 
 	Exit
