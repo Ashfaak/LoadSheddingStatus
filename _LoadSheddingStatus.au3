@@ -42,25 +42,25 @@ Func LSS_Durban($durbanls_URL, $Verbose = 0) ; Check loadshedding status accordi
   
   Local $_htmlDurban2[2]
   $_htmlDurban2 = ParseBurn($_htmlDurban1, $StringID)
-  Local $_htmlDurban2a = StringRegExpReplace($_htmlDurban2[0], 'Â', "")
+  Local $_htmlDurban2a = StringRegExpReplace($_htmlDurban2[0], 'Â| |\r', " ")
   
   Local $_htmlDurban3[2]
   $_htmlDurban3 = ParseBurn($_htmlDurban2[1], $StringID)
-  Local $_htmlDurban3a = StringRegExpReplace($_htmlDurban3[0], 'Â', "")
+  Local $_htmlDurban3a = StringRegExpReplace($_htmlDurban3[0], 'Â| |\r', " ")
   
   Local $_htmlDurban4[2]
   $_htmlDurban4 = ParseBurn($_htmlDurban3[1], $StringID)
-  Local $_htmlDurban4a = StringRegExpReplace($_htmlDurban4[0], 'Â', "")
+  Local $_htmlDurban4a = StringRegExpReplace($_htmlDurban4[0], 'Â| |\r', " ")
   
   Local $_htmlDurban5[2]
   $_htmlDurban5 = ParseBurn($_htmlDurban4[1], $StringID)
-  Local $_htmlDurban5a = StringRegExpReplace($_htmlDurban5[0], 'Â', "")
+  Local $_htmlDurban5a = StringRegExpReplace($_htmlDurban5[0], 'Â| |\r', " ")
   
   Local $_htmlDurban6[2]
   $_htmlDurban6 = ParseBurn($_htmlDurban5[1], $StringID)
-  Local $_htmlDurban6a = StringRegExpReplace($_htmlDurban6[0], 'Â', "")
+  Local $_htmlDurban6a = StringRegExpReplace($_htmlDurban6[0], 'Â| |\r', " ")
   
-  Local $_htmlDurbanRed = StringStripCR(StringRegExpReplace($_htmlDurban2a & $_htmlDurban3a & $_htmlDurban4a & $_htmlDurban5a & $_htmlDurban6a, '<[^>]*>', ""))
+  Local $_htmlDurbanRed = StringStripWS(StringRegExpReplace($_htmlDurban2a & $_htmlDurban3a & $_htmlDurban4a & $_htmlDurban5a & $_htmlDurban6a, '<[^>]*>', ""),4+2+1)
     
 ;~ 	
 ;~ 	Local $_htmlDurban1a = StringRegExpReplace($_htmlDurban1, 'Â', "")
