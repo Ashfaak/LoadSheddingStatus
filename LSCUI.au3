@@ -2,7 +2,7 @@
 #AutoIt3Wrapper_Change2CUI=y
 #AutoIt3Wrapper_Res_Comment=Load Shedding CUI
 #AutoIt3Wrapper_Res_Description=Checks the current load shedding status
-#AutoIt3Wrapper_Res_Fileversion=1.0.0.6
+#AutoIt3Wrapper_Res_Fileversion=1.0.0.8
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=p
 #AutoIt3Wrapper_Res_LegalCopyright=2015 Ashfaak
 #AutoIt3Wrapper_Run_Tidy=y
@@ -20,6 +20,7 @@
 #include <_LoadSheddingStatus.au3>
 ;~ #include <GetOpt.au3>
 
+Local $timeStart = @HOUR & ":" & @MIN & ":" & @SEC
 Local $ewnls_URL = "http://ewn.co.za/assets/loadshedding/assets/loadshedding/api/status"
 Local $news24ls_URL = "http://loadshedding.news24.com/api/stage"
 Local $eskomls_URL = "http://loadshedding.eskom.co.za/LoadShedding/GetStatus"
@@ -32,8 +33,9 @@ Local $ForceSource = 0
 Local $noSplit = 0
 Local $help = 0
 Local $aSourceChange[2]
-Local $allsources = 0
 Local $aCMD[6] ;Number of command line input variables, see cmdlineParse()
+
+Local $allsources = 0
 Global $Verbose = 0
 
 Local $scmdline = _ArrayToString($CmdLine, " ", 1)
@@ -53,7 +55,7 @@ If StringLen($scmdline) > 0 Then ; Handling commandline inputs
 	If $help = 1 Then Help()
 
 	If $Verbose = 1 Then
-		ConsoleWrite("Verbose Mode" & @CRLF)
+		ConsoleWrite("Verbose Mode " & $timeStart & @CRLF)
 		If $noSplit = 1 Then ConsoleWrite("NoSplit" & @CRLF)
 		Switch $Source
 			Case 0
@@ -78,10 +80,6 @@ If $allsources = 1 Then ; When 'all' is input
 	ConsoleWrite("Eskom = ")
 	ConsoleWrite($EskomStatus & @CRLF)
 
-	Local $DurbanStatus = LSS_Durban($durbanls_URL, $Verbose)
-	ConsoleWrite("Durban = ")
-	ConsoleWrite($DurbanStatus & @CRLF)
-
 	Local $news24status = LSS_N24($news24ls_URL, $Verbose)
 	ConsoleWrite("News24 = ")
 	ConsoleWrite($news24status & @CRLF)
@@ -90,7 +88,13 @@ If $allsources = 1 Then ; When 'all' is input
 	ConsoleWrite("Joburg = ")
 	ConsoleWrite($JoburgStatus & @CRLF)
 
+	Local $DurbanStatus = LSS_Durban($durbanls_URL, $Verbose)
+	ConsoleWrite("Durban = ")
+	ConsoleWrite($DurbanStatus & @CRLF)
+
+	If $Verbose Then ConsoleWrite(@HOUR & ":" & @MIN & ":" & @SEC)
 	Exit
+
 EndIf
 
 Select ; Source output and fallback, convert to function
@@ -103,6 +107,7 @@ Select ; Source output and fallback, convert to function
 		Else
 			If $Verbose = 1 Then ConsoleWrite("Status Durban = ")
 			ConsoleWrite($out)
+			If $Verbose Then ConsoleWrite(@CRLF & @HOUR & ":" & @MIN & ":" & @SEC)
 			Exit
 		EndIf
 	Case $Source = 3 ; If source is Joburg
@@ -114,6 +119,7 @@ Select ; Source output and fallback, convert to function
 		Else
 			If $Verbose = 1 Then ConsoleWrite("Status Joburg = ")
 			ConsoleWrite($out)
+			If $Verbose Then ConsoleWrite(@CRLF & @HOUR & ":" & @MIN & ":" & @SEC)
 			Exit
 		EndIf
 EndSelect
@@ -135,6 +141,7 @@ Else
 	ConsoleWrite($aSourceChange)
 EndIf
 
+If $Verbose Then ConsoleWrite(@CRLF & @HOUR & ":" & @MIN & ":" & @SEC)
 
 Func cmdlineParse($acmdline) ; Parses commandline inputs
 	Local $Verbose = 0
