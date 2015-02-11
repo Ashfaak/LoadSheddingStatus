@@ -42,7 +42,7 @@ Func LSS_Durban($durbanls_URL, $Verbose = 0) ; Check loadshedding status accordi
   
   Local $_htmlDurban2[2]
   $_htmlDurban2 = ParseBurn($_htmlDurban1, $StringID, 1)
-  Local $_htmlDurbanRed = StringStripWS(StringRegExpReplace(StringRegExpReplace($_htmlDurban2[0], 'Â| |\r', " "), '<[^>]*>', ""),4+2+1)
+  Local $_htmlDurbanRed = StringStripWS(StringRegExpReplace(StringRegExpReplace($_htmlDurban2[0], 'Â| |\r', " "), '<[^>]*>|â€‹', ""),4+2+1)
     
 ;~ 	Local $_htmlDurban1a = StringRegExpReplace($_htmlDurban1, 'Â', "")
 ;~   If StringInStr(StringStripWS(StringMid($_htmlDurban1a,StringInStr($_htmlDurban1a, "STATUS") + 7, 10), 8),"INACTIVE") > 1 Then Return 0
