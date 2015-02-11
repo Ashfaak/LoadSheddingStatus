@@ -2,7 +2,7 @@
 #AutoIt3Wrapper_Change2CUI=y
 #AutoIt3Wrapper_Res_Comment=Load Shedding CUI
 #AutoIt3Wrapper_Res_Description=Checks the current load shedding status
-#AutoIt3Wrapper_Res_Fileversion=1.0.0.8
+#AutoIt3Wrapper_Res_Fileversion=1.0.0.11
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=p
 #AutoIt3Wrapper_Res_LegalCopyright=2015 Ashfaak
 #AutoIt3Wrapper_Run_Tidy=y

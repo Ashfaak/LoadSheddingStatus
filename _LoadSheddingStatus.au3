@@ -41,28 +41,9 @@ Func LSS_Durban($durbanls_URL, $Verbose = 0) ; Check loadshedding status accordi
   Local $StringID = "ms-rteForeColor-2"
   
   Local $_htmlDurban2[2]
-  $_htmlDurban2 = ParseBurn($_htmlDurban1, $StringID)
-  Local $_htmlDurban2a = StringRegExpReplace($_htmlDurban2[0], 'Â| |\r', " ")
-  
-  Local $_htmlDurban3[2]
-  $_htmlDurban3 = ParseBurn($_htmlDurban2[1], $StringID)
-  Local $_htmlDurban3a = StringRegExpReplace($_htmlDurban3[0], 'Â| |\r', " ")
-  
-  Local $_htmlDurban4[2]
-  $_htmlDurban4 = ParseBurn($_htmlDurban3[1], $StringID)
-  Local $_htmlDurban4a = StringRegExpReplace($_htmlDurban4[0], 'Â| |\r', " ")
-  
-  Local $_htmlDurban5[2]
-  $_htmlDurban5 = ParseBurn($_htmlDurban4[1], $StringID)
-  Local $_htmlDurban5a = StringRegExpReplace($_htmlDurban5[0], 'Â| |\r', " ")
-  
-  Local $_htmlDurban6[2]
-  $_htmlDurban6 = ParseBurn($_htmlDurban5[1], $StringID)
-  Local $_htmlDurban6a = StringRegExpReplace($_htmlDurban6[0], 'Â| |\r', " ")
-  
-  Local $_htmlDurbanRed = StringStripWS(StringRegExpReplace($_htmlDurban2a & $_htmlDurban3a & $_htmlDurban4a & $_htmlDurban5a & $_htmlDurban6a, '<[^>]*>', ""),4+2+1)
+  $_htmlDurban2 = ParseBurn($_htmlDurban1, $StringID, 1)
+  Local $_htmlDurbanRed = StringStripWS(StringRegExpReplace(StringRegExpReplace($_htmlDurban2[0], 'Â| |\r', " "), '<[^>]*>', ""),4+2+1)
     
-;~ 	
 ;~ 	Local $_htmlDurban1a = StringRegExpReplace($_htmlDurban1, 'Â', "")
 ;~   If StringInStr(StringStripWS(StringMid($_htmlDurban1a,StringInStr($_htmlDurban1a, "STATUS") + 7, 10), 8),"INACTIVE") > 1 Then Return 0
 ;~   Local $_htmlDurban2 = StringInStr($_htmlDurban1a, "LOAD SHEDDING STAGE:")
@@ -71,7 +52,7 @@ Func LSS_Durban($durbanls_URL, $Verbose = 0) ; Check loadshedding status accordi
   If $Verbose Then ConsoleWrite("Durban Raw = " & $_htmlDurbanRed & @CRLF)
   
   Local $aHtmlDurbanStage[2]
-  $aHtmlDurbanStage = ParseBurn($_htmlDurbanRed,"stage",":","", 2)
+  $aHtmlDurbanStage = ParseBurn($_htmlDurbanRed,"stage", 0,":","", 2)
   $_htmlDurbanStage = $aHtmlDurbanStage[0]
   
 ;~   ConsoleWrite($_htmlDurbanRed & @CRLF)
@@ -166,9 +147,9 @@ Func LSS_Joburg($joburgls_URL, $Verbose = 0) ; Check loadshedding status accordi
   Local $StringID = "ms-rteForeColor-2"
   
   Local $_htmlJoburg2[2]
-  $_htmlJoburg2 = ParseBurn($_htmlJoburg1, $StringID, "<strong>", "</", 8)
-  Local $_htmlJoburg3a = StringStripWS(StringRegExpReplace($_htmlJoburg2[0], 'â€‹|\&#.*?\;', " "), 4+2+1 )
-  
+  $_htmlJoburg2 = ParseBurn($_htmlJoburg1, $StringID, 1, "<strong>", "</", 8)
+  Local $_htmlJoburg3a = StringStripWS(StringRegExpReplace(StringRegExpReplace($_htmlJoburg2[0],'&#58;',":"), '<[^>]*>|â€‹|\&#.*?\;', " "), 4+2+1 ) ; 
+   
   If $Verbose Then ConsoleWrite("Joburg Raw = " & $_htmlJoburg3a & @CRLF)
   
 	Select
@@ -197,15 +178,42 @@ Func LSS_N24($news24ls_URL, $Verbose = 0) ; Check loadshedding status according 
 Return $_htmlN24
 EndFunc   ;==>LSS_N24
 
-Func ParseBurn($htmlString, $stringID, $initialSymbol = ">", $finalSymbol = "</", $offset = 1) ; used internally to parse html a bit better
+Func ParseBurn($htmlString, $stringID, $repeat = 0, $initialSymbol = ">", $finalSymbol = "</", $offset = 1) ; used internally to parse html a bit better
   Local $_ClassID = StringInStr($htmlString, $stringID) ; Start at stringID
-;~   ConsoleWrite($_ClassID & @CRLF)      ; Must be a better way to do this
-; Add checks for broken stuff
-  Local $htmlString1 = StringTrimLeft($htmlString,$_ClassID) ;Trim off until stringID
-  Local $bracketEnd = StringInStr($htmlString1, $initialSymbol)
-  Local $bracketStart = StringInStr($htmlString1, $finalSymbol) ; find the bracket points
-  Local $htmlStringOut = StringMid($htmlString1,$bracketEnd + $offset,$bracketStart - $bracketEnd - $offset) ; cut the string according to the brackets
   Local $Output[2]
+  
+  If $_ClassID = 0 And $repeat = 0 Then
+    $Output[0] = ""
+    $Output[1] = $htmlString
+    Return $Output
+  EndIf
+  
+  Local $htmlStringOut = ""
+  
+  While $_ClassID > 0
+;~     ConsoleWrite($_ClassID & @CRLF)      ; Must be a better way to do this parseburn thing
+    
+; ########################### Add checks for broken stuff ##############################
+    
+    Local $htmlString1 = StringTrimLeft($htmlString,$_ClassID) ;Trim off until stringID
+    Local $bracketEnd = StringInStr($htmlString1, $initialSymbol)
+    Local $bracketStart = StringInStr($htmlString1, $finalSymbol) ; find the bracket points
+    Local $htmlStringOuta = StringMid($htmlString1,$bracketEnd + $offset,$bracketStart - $bracketEnd - $offset) ; cut the string according to the brackets
+    
+    If $htmlStringOut = "" Then
+      $htmlStringOut = $htmlStringOuta
+    Else
+      $htmlStringOut = $htmlStringOut &" "& $htmlStringOuta
+    EndIf
+    
+    $htmlString = $htmlString1
+    
+    If $repeat = 0 Then ExitLoop
+    
+    $_ClassID = StringInStr($htmlString, $stringID)
+    
+  WEnd
+  
   $Output[0] = $htmlStringOut ; the filtered string
   $Output[1] = $htmlString1 ; output the remainder of the string
   Return $Output
